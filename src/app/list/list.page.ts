@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedDataService } from '../shared-data.service';
 import { SwapiService } from '../swapi.service';
+import { ConsoleReporter } from 'jasmine';
 
 @Component({
   selector: 'app-list',
@@ -21,21 +22,29 @@ export class ListPage implements OnInit {
     'bluetooth',
     'build'
   ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
+  //public items: Array<{ title: string; note: string; icon: string }> = [];
+  public items: string[] = ['Tom'];
   constructor(
     private sharedDataFooSvc: SharedDataService
     , private swapiSvc: SwapiService
-  ) {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
-  }
+  ) {}
 
   ngOnInit() {
+
+    this.swapiSvc.getPlanets().subscribe(
+      data => {
+        console.log(data);
+
+        this.items = [
+          ...this.items
+          , ...(<any> data).results.map(x => x.name)
+        ].sort()
+
+        console.log(this.items);
+      }
+      , err => console.error(err)
+    );
+
   }
   // add back when alpha.4 is out
   // navigate(item) {
