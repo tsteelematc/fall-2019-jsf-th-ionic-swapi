@@ -38,7 +38,9 @@ export class ListPage implements OnInit {
         this.items = [
           ...this.items
           , ...(<any> data).results.map(x => x.name)
-        ].sort()
+        ]
+        //.filter(x => x[0] == 'T')
+        .sort()
 
         console.log(this.items);
       }
